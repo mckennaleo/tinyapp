@@ -3,12 +3,11 @@ const app = express();
 const PORT = 8080; // default port 8080
 const bodyParser = require("body-parser");
 
-const randomString = (length, chars) => {
+const generateRandomString = (length, chars) => {
   let result = '';
   for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
   return result;
 };
-let rString = randomString(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
 
 
 app.use(bodyParser.urlencoded({extended: true}));
@@ -51,6 +50,16 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.post("/urls", (req, res) => {
-  console.log(req.body);  // Log the POST request body to the console
-  res.send("Ok");         // Respond with 'Ok' (we will replace this)
+  let shortURL = generateRandomString(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  urlDatabase[shortURL] = req.body.longURL;
+  console.log(urlDatabase);
+  const url = "/u/" + shortURL;
+  console.log('redirecting to: ', url);
+  res.redirect(url);
 });
+
+app.get("/u/:shortURL", (req, res) => {
+  const longURL = urlDatabase[req.params.shortURL];
+  res.redirect(longURL);
+});
+
