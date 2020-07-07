@@ -14,7 +14,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 
 const urlDatabase = {
-  "b2xVn2": "http://www.lighthouselabs.ca",
+  "12xVn2": "http://www.lighthouselabs.ca",
   "9sm5xK": "http://www.google.com"
 };
 
@@ -52,9 +52,9 @@ app.get("/urls/:shortURL", (req, res) => {
 app.post("/urls", (req, res) => {
   let shortURL = generateRandomString(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
   urlDatabase[shortURL] = req.body.longURL;
-  console.log(urlDatabase);
+  // console.log(urlDatabase);
   const url = "/u/" + shortURL;
-  console.log('redirecting to: ', url);
+  // console.log('redirecting to: ', url);
   res.redirect(url);
 });
 
@@ -67,5 +67,12 @@ app.post("/urls/:shortURL/delete", (req, res) => {
 app.get("/u/:shortURL", (req, res) => {
   const longURL = urlDatabase[req.params.shortURL];
   res.redirect(longURL);
+});
+
+app.post("/urls/:shortURL", (req, res) => {
+  let shortURL = req.params.shortURL;
+  urlDatabase[shortURL] = req.body.longURL;
+  const url = "/u/" + shortURL;
+  res.redirect(url);
 });
  
