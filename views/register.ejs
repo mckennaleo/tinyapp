@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+
+  <title>Register</title>
+</head>
+<body>
+  <%- include('partials/_header') %>
+
+  <main>
+    <h3 style="text-align: center;">Register</h3>
+    <form style="text-align: left;" class="form-inline" action="/register" method="POST">
+      <div>
+        <label for="username">Username</label>
+        <input class="form-inline" type="username" name="username" placeholder="Your first name" style="width: 300px; margin: 1em">
+        <label for="fistName">First Name</label>
+        <input class="form-inline" type="firstName" name="firstName" placeholder="Your first name" style="width: 300px; margin: 1em">
+        <label for="lastName">Last Name</label>
+        <input class="form-inline" type="lastName" name="lastName" placeholder="Your last name" style="width: 300px; margin: 1em">
+        <label for="email">Email</label>
+        <input class="form-inline" type="email" name="email" placeholder="name@server.com" style="width: 300px; margin: 1em">
+        <label for="password">password</label>
+        <input class="form-inline" type="password" name="password" placeholder="password" style="width: 300px; margin: 1em">
+        <button type="submit" class="btn btn-primary" style="display: block; margin: 0 auto;">Register</button>
+      </div>
+    </form>
+  </main>
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>
