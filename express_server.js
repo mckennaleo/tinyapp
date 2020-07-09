@@ -14,6 +14,7 @@ const {
 const { loginLookup } = require('./middlewares');
 const { urlDatabase, userDatabase } = require('./databases');
 
+// ----------APP SETUP-----------
 
 const app = express();
 const PORT = 8080; // default port 8080
@@ -21,15 +22,6 @@ app.use(cookieSession({
   name: 'session',
   keys: ['userID']
 }));
-
-// ----------DATA----------
-
-
-// ----------FUNCTIONS----------
-
-
-
-// ----------APP SETUP-----------
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -107,8 +99,9 @@ app.get("/urls", (req, res) => {
 
 app.get("/urls/new", (req, res) => {
   let templateVars = {
-    shortURL: req.params.shortURL, longURL: req.params.longURL, user: userDatabase[req.session.user_id]
+    shortURL: req.params.shortURL, user: userDatabase[req.session.user_id]
   };
+
   const user = userDatabase[req.session.user_id];
   if (user) {
     res.render("urls_new", templateVars);
@@ -119,8 +112,9 @@ app.get("/urls/new", (req, res) => {
 
 app.get("/urls/:shortURL", (req, res) => {
   let templateVars = {
-    shortURL: req.params.shortURL, longURL: req.params.longURL, user: userDatabase[req.session.user_id]
+    shortURL: req.params.shortURL, longURL: urlDatabase[req.params.shortURL].longURL, user: userDatabase[req.session.user_id]
   };
+
   if (req.session.user_id === urlDatabase[req.params.shortURL].userID) {
     res.render("urls_show", templateVars);
   } else {
@@ -129,12 +123,7 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  let templateVars = {
-    urls: urlDatabase,
-    user: userDatabase[req.session.user_id]
-  };
   const longURL = urlDatabase[req.params.shortURL].longURL;
-  // console.log(urlDatabase);
   res.redirect(longURL);
 });
 
@@ -166,23 +155,14 @@ app.post("/login", loginLookup, (req, res) => {
   res.redirect("/urls");
 });
 
-// app.post("/login", (req, res, next) => {
-//   console.log('Request URL:', req.originalUrl);
-//   next();
-// }, (req, res, next) => {
-//   console.log('Request Type:', req.method);
-//   next();
-// });
-
 app.post("/logout", (req, res) => {
-  // console.log(req);
   req.session = undefined;
   res.redirect("/urls");
 });
 
 app.post("/register", (req, res) => {
 
-  const userID = generateUserID(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  const userID = generateUserID();
   const email = req.body.email;
   const password = req.body.password;
   if (email === "" || password === "") {
@@ -192,7 +172,6 @@ app.post("/register", (req, res) => {
     res.redirect("/error");
   } else {
     userDatabase[userID] = { userID, email, password: bcrypt.hashSync(password, 10) };
-    // console.log(userDatabase);
     req.session["user_id"] = userID;
     res.redirect("/urls");
   }
@@ -200,16 +179,13 @@ app.post("/register", (req, res) => {
 
 app.post("/urls", (req, res) => {
   let user = userDatabase[req.session.user_id];
-  let shortURL = generateRandomString(6, '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ');
+  let shortURL = generateRandomString();
   urlDatabase[shortURL] = { longURL: req.body.longURL, userID: user.userID };
-  // console.log(urlDatabase);
   const url = "/u/" + shortURL;
-  // console.log('redirecting to: ', url);
-  res.redirect(url);
+  res.redirect("/urls");
 });
 
 app.post("/urls/:shortURL/delete", (req, res) => {
-  // console.log(req.params.shortURL);
   delete urlDatabase[req.params.shortURL];
   res.redirect("/urls");
 });

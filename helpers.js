@@ -1,12 +1,15 @@
-const generateUserID = (length, chars) => {
+const generateUserID = () => {
   let result = '';
-  for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+  for (let i = 6; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
   return result;
 };
 
-const generateRandomString = (length, chars) => {
+const generateRandomString = () => {
+  const chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
   let result = '';
-  for (let i = length; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
+  for (let i = 6; i > 0; --i) result += chars[Math.floor(Math.random() * chars.length)];
   return result;
 };
 
