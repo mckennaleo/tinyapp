@@ -12,6 +12,7 @@ const {
   urlsForUser
 } = require('./helpers');
 const { loginLookup } = require('./middlewares');
+const { urlDatabase, userDatabase } = require('./databases');
 
 
 const app = express();
@@ -23,15 +24,6 @@ app.use(cookieSession({
 
 // ----------DATA----------
 
-const urlDatabase = {
-  "12xVn2": { longURL: "http://www.lighthouselabs.ca", userID: "afifub3" },
-  "9sm5xK": { longURL: "http://www.google.com", userID: "afifub3" }
-};
-
-let userDatabase = {
-  "afifub3": { userID: "afifub3", email: "abc@abc.com", password: "password" }
-
-};
 
 // ----------FUNCTIONS----------
 
@@ -166,18 +158,21 @@ app.post("/errorLogin", (req, res) => {
   res.redirect("/login");
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", loginLookup, (req, res) => {
   const email = req.body.email;
-  const password = req.body.password;
   const userID = getUserByEmail(email, userDatabase);
-  
-  if (loginLookup(email, password, userDatabase) === true) {
-    req.session.user_id = userID;
-    res.redirect("/urls");
-  } else {
-    res.redirect("/errorLogin");
-  }
+
+  req.session["user_id"] = userID;
+  res.redirect("/urls");
 });
+
+// app.post("/login", (req, res, next) => {
+//   console.log('Request URL:', req.originalUrl);
+//   next();
+// }, (req, res, next) => {
+//   console.log('Request Type:', req.method);
+//   next();
+// });
 
 app.post("/logout", (req, res) => {
   // console.log(req);
@@ -198,7 +193,7 @@ app.post("/register", (req, res) => {
   } else {
     userDatabase[userID] = { userID, email, password: bcrypt.hashSync(password, 10) };
     // console.log(userDatabase);
-    req.session.user_id = userID;
+    req.session["user_id"] = userID;
     res.redirect("/urls");
   }
 });
@@ -225,3 +220,4 @@ app.post("/urls/:shortURL", (req, res) => {
   const url = "/u/" + shortURL;
   res.redirect(url);
 });
+
