@@ -31,10 +31,6 @@ app.get("/", (req, res) => {
   res.send("Hello!");
 });
 
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}!`);
-});
-
 // ----------GETS----------
 
 app.get("/error400", (req, res) => {
@@ -197,3 +193,8 @@ app.post("/urls/:shortURL", (req, res) => {
   res.redirect(url);
 });
 
+// ----------APP LISTEN----------
+
+app.listen(PORT, () => {
+  console.log(`Example app listening on port ${PORT}!`);
+});
