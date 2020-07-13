@@ -9,8 +9,7 @@ const {
   generateRandomString,
   emailLookup,
   getUserByEmail,
-  urlsForUser,
-  getLongUrl
+  urlsForUser
 } = require('./helpers');
 const { loginLookup } = require('./middlewares');
 const { urlDatabase, userDatabase } = require('./databases');
@@ -95,7 +94,6 @@ app.get("/urls", (req, res) => {
       urls: urlsForUser(user.userID, urlDatabase),
       user: userDatabase[req.session.user_id]
     };
-    // console.log(urlDatabase);
     res.render("urls_index", templateVars);
   } else {
     res.redirect("/error402");
@@ -123,7 +121,6 @@ app.get("/urls/:shortURL", (req, res) => {
   };
 
   if (req.session.user_id === urlDatabase[req.params.shortURL].userID) {
-    // console.log(urlDatabase);
     res.render("urls_show", templateVars);
   } else {
     res.redirect("/error405");
@@ -131,8 +128,6 @@ app.get("/urls/:shortURL", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
-  // console.log(req);
-  
   const longURL = urlDatabase[req.params.shortURL].longURL;
   res.redirect(longURL);
 });
@@ -200,8 +195,6 @@ app.post("/urls", (req, res) => {
 app.post("/urls/:shortURL/edit", (req, res) => {
   let user = userDatabase[req.session.user_id];
   let shortURL = req.params.shortURL;
-  // console.log(req.params);
-  // console.log(req.body);
 
   urlDatabase[shortURL] = { longURL: req.body.longURL, userID: user.userID };
   res.redirect("/urls");

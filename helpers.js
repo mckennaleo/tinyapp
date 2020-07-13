@@ -41,16 +41,11 @@ const urlsForUser = (ID, urlDatabase) => {
   return userURLs;
 };
 
-const getLongUrl = (short, urlDatabase) => {
-  return urlDatabase[short].longURL;
-}
-
 
 module.exports = {
   generateUserID,
   generateRandomString,
   emailLookup,
   getUserByEmail,
-  urlsForUser,
-  getLongUrl
+  urlsForUser
 };
